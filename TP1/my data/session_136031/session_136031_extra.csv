@@ -1,4 +1,4 @@
-Name,Latitude,Longitude,Latitude (Rad),Longitude (Rad),Timestamp,Time Delta (s),Haversine Distance (Km),Haversine Distance (m),Velocity (m / s) = Distance (m) / Time (s)
+Name,Latitude_(Deg),Longitude_(Deg),Latitude_(Rad),Longitude_(Rad),Timestamp_,Time_Delta_(s),Haversine Distance (Km),Haversine_Distance_(m),Velocity_(m/s)
 2,40.18355,-8.41375,0.7013352526,-0.1468476399,1/23/2016 11:53:07,0.00,0,0,0.00
 3,40.18606,-8.41475,0.7013790604,-0.1468650932,1/23/2016 11:53:08,1.16,0.2917409458,291.7409458,252.06
 4,40.18515,-8.41437,0.7013631779,-0.146858461,1/23/2016 11:53:09,1.16,0.1062116148,106.2116148,91.77
