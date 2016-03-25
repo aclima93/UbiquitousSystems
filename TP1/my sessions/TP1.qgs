@@ -8,13 +8,13 @@
     </layer-tree-group>
     <layer-tree-group expanded="1" checked="Qt::PartiallyChecked" name="Time_Delta">
       <customproperties/>
-      <layer-tree-layer expanded="1" checked="Qt::Checked" id="Time_Delta_020160325142410019" name="Time_Delta_0">
+      <layer-tree-layer expanded="1" checked="Qt::Checked" id="Time_Delta_2_31_20160325144911770" name="Time_Delta_2.31+">
         <customproperties/>
       </layer-tree-layer>
-      <layer-tree-layer expanded="1" checked="Qt::Checked" id="Time_Delta_1_1620160325142255763" name="Time_Delta_1.16">
+      <layer-tree-layer expanded="1" checked="Qt::Checked" id="Time_Delta_1_1620160325144902518" name="Time_Delta_1.16">
         <customproperties/>
       </layer-tree-layer>
-      <layer-tree-layer expanded="1" checked="Qt::Checked" id="Time_Delta_2_31_20160325142245709" name="Time_Delta_2.31+">
+      <layer-tree-layer expanded="1" checked="Qt::Checked" id="Time_Delta_020160325144808084" name="Time_Delta_0">
         <customproperties/>
       </layer-tree-layer>
       <layer-tree-layer expanded="0" checked="Qt::Unchecked" id="session_136031_join_copy20160325022610341" name="Time_Delta">
@@ -56,10 +56,10 @@
   <mapcanvas>
     <units>meters</units>
     <extent>
-      <xmin>-937091.5282873596297577</xmin>
-      <ymin>4892752.95515567809343338</ymin>
-      <xmax>-936548.15102744207251817</xmax>
-      <ymax>4893398.24866184964776039</ymax>
+      <xmin>-936927.97668738360516727</xmin>
+      <ymin>4892735.88252867851406336</ymin>
+      <xmax>-936384.59942746604792774</xmax>
+      <ymax>4893286.06447123270481825</ymax>
     </extent>
     <rotation>0</rotation>
     <projections>1</projections>
@@ -86,6 +86,7 @@
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_020160325005931723"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:3857" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_extra20160324232159919"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_13603120160308123647620"/>
+      <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_join_selected20160325144258637"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_join_selected20160325003410421"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_13603120160324011052752"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_route_points_any20160316174857705"/>
@@ -102,6 +103,7 @@
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_copy20160325010337243"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_complete_selected20160324234907555"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_join_selected20160325003531676"/>
+      <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_join_selected20160325144412849"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_1_1620160325005946793"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="2014_02_23_Maps3D_tracks_any20160316174854697"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="2014_02_23_Maps3D_Points_any20160308123729799"/>
@@ -109,6 +111,7 @@
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_join_selected20160325011832534"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_13601_waypoints_any20160316174855874"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_1_1620160325142255763"/>
+      <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_020160325144808084"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_020160325004027837"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_2_31_20160325134924410"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Velocity__0_1_20160325132157084"/>
@@ -116,6 +119,7 @@
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_waypoints_any20160316174857673"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_track_points_any20160316174857713"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_routes_any20160316174857682"/>
+      <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_2_31_20160325144911770"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_020160325141905842"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="map_other_relations_any20160308123248380"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_complete_selected20160325000616318"/>
@@ -129,8 +133,11 @@
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_1360120160322191140410"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_18_5220160325010105503"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_4_6320160325004522486"/>
+      <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_join_selected20160325144025315"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_join_selected20160325003156436"/>
+      <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_1_16_shp20160325143438196"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_13603120160322190802631"/>
+      <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_1_1620160325144902518"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_join_copy20160325022610341"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="map_multipolygons_any20160308123248312"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_tracks_any20160322190723018"/>
@@ -170,27 +177,27 @@
       <item>Velocity__2__inf_20160325132950851</item>
       <item>Velocity__1_2_20160325133006121</item>
       <item>Velocity__0_1_20160325133021489</item>
-      <item>Time_Delta_2_31_20160325142245709</item>
-      <item>Time_Delta_1_1620160325142255763</item>
-      <item>Time_Delta_020160325142410019</item>
+      <item>Time_Delta_020160325144808084</item>
+      <item>Time_Delta_1_1620160325144902518</item>
+      <item>Time_Delta_2_31_20160325144911770</item>
     </custom-order>
   </layer-tree-canvas>
   <legend updateDrawingOrder="true">
     <legendgroup open="true" checked="Qt::Unchecked" name="Sections"/>
     <legendgroup open="true" checked="Qt::PartiallyChecked" name="Time_Delta">
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Time_Delta_0" showFeatureCount="0">
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Time_Delta_2.31+" showFeatureCount="0">
         <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="Time_Delta_020160325142410019" visible="1"/>
+          <legendlayerfile isInOverview="0" layerid="Time_Delta_2_31_20160325144911770" visible="1"/>
         </filegroup>
       </legendlayer>
       <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Time_Delta_1.16" showFeatureCount="0">
         <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="Time_Delta_1_1620160325142255763" visible="1"/>
+          <legendlayerfile isInOverview="0" layerid="Time_Delta_1_1620160325144902518" visible="1"/>
         </filegroup>
       </legendlayer>
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Time_Delta_2.31+" showFeatureCount="0">
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Time_Delta_0" showFeatureCount="0">
         <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="Time_Delta_2_31_20160325142245709" visible="1"/>
+          <legendlayerfile isInOverview="0" layerid="Time_Delta_020160325144808084" visible="1"/>
         </filegroup>
       </legendlayer>
       <legendlayer drawingOrder="-1" open="false" checked="Qt::Unchecked" name="Time_Delta" showFeatureCount="0">
@@ -272,7 +279,7 @@
       </customproperties>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Point" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>Time_Delta_020160325142410019</id>
+      <id>Time_Delta_020160325144808084</id>
       <datasource>../my data/session_136031/Time_Delta/Time_Delta_0/Time_Delta_0.shp</datasource>
       <shortname>Time_Delta_0</shortname>
       <title></title>
@@ -341,7 +348,7 @@
           <symbol alpha="1" clip_to_extent="1" type="marker" name="0">
             <layer pass="0" class="SimpleMarker" locked="0">
               <prop k="angle" v="0"/>
-              <prop k="color" v="142,225,40,255"/>
+              <prop k="color" v="47,184,113,255"/>
               <prop k="horizontal_anchor_point" v="1"/>
               <prop k="name" v="circle"/>
               <prop k="offset" v="0,0"/>
@@ -408,7 +415,7 @@
       </conditionalstyles>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Point" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>Time_Delta_1_1620160325142255763</id>
+      <id>Time_Delta_1_1620160325144902518</id>
       <datasource>../my data/session_136031/Time_Delta/Time_Delta_1.16/Time_Delta_1.16.shp</datasource>
       <shortname>Time_Delta_1.16</shortname>
       <title></title>
@@ -477,7 +484,7 @@
           <symbol alpha="1" clip_to_extent="1" type="marker" name="0">
             <layer pass="0" class="SimpleMarker" locked="0">
               <prop k="angle" v="0"/>
-              <prop k="color" v="177,135,181,255"/>
+              <prop k="color" v="56,90,183,255"/>
               <prop k="horizontal_anchor_point" v="1"/>
               <prop k="name" v="circle"/>
               <prop k="offset" v="0,0"/>
@@ -544,7 +551,7 @@
       </conditionalstyles>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Point" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>Time_Delta_2_31_20160325142245709</id>
+      <id>Time_Delta_2_31_20160325144911770</id>
       <datasource>../my data/session_136031/Time_Delta/Time_Delta_2.31+/Time_Delta_2.31+.shp</datasource>
       <shortname>Time_Delta_2.31+</shortname>
       <title></title>
@@ -613,7 +620,7 @@
           <symbol alpha="1" clip_to_extent="1" type="marker" name="0">
             <layer pass="0" class="SimpleMarker" locked="0">
               <prop k="angle" v="0"/>
-              <prop k="color" v="213,46,163,255"/>
+              <prop k="color" v="230,94,45,255"/>
               <prop k="horizontal_anchor_point" v="1"/>
               <prop k="name" v="circle"/>
               <prop k="offset" v="0,0"/>
@@ -3890,8 +3897,14 @@ def my_form_open(dialog, layer, feature):
         <value>Velocity__2__inf_20160325132950851</value>
         <value>Velocity__1_2_20160325133006121</value>
         <value>Velocity__0_1_20160325133021489</value>
+        <value>Time_Delta_020160325144808084</value>
+        <value>Time_Delta_1_1620160325144902518</value>
+        <value>Time_Delta_2_31_20160325144911770</value>
       </LayerSnappingList>
       <LayerSnappingEnabledList type="QStringList">
+        <value>enabled</value>
+        <value>enabled</value>
+        <value>enabled</value>
         <value>enabled</value>
         <value>enabled</value>
         <value>enabled</value>
@@ -3910,8 +3923,14 @@ def my_form_open(dialog, layer, feature):
         <value>2</value>
         <value>2</value>
         <value>2</value>
+        <value>2</value>
+        <value>2</value>
+        <value>2</value>
       </LayerSnappingToleranceUnitList>
       <LayerSnapToList type="QStringList">
+        <value>to_vertex</value>
+        <value>to_vertex</value>
+        <value>to_vertex</value>
         <value>to_vertex</value>
         <value>to_vertex</value>
         <value>to_vertex</value>
@@ -3923,6 +3942,9 @@ def my_form_open(dialog, layer, feature):
       <DefaultSnapType type="QString">off</DefaultSnapType>
       <DefaultSnapTolerance type="double">0</DefaultSnapTolerance>
       <LayerSnappingToleranceList type="QStringList">
+        <value>0.000000</value>
+        <value>0.000000</value>
+        <value>0.000000</value>
         <value>0.000000</value>
         <value>0.000000</value>
         <value>0.000000</value>
