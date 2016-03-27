@@ -1,0 +1,40 @@
+Para a demo:
+	- Visualizar os dados GPX obtidos com o sense my city no QGIS
+		-> se o GPX não funcionar podemos experimentar converter para um CSV
+	- Adicionar um shapefile (do OpenStreetMaps por exemplo) e sobrepor os dados
+	- para cada medição temos: Timestamp, latitude, longitude, etc. 
+		-> adiconar um campo com a distância ao próximo ponto
+		-> adicionar também a velocidade de deslocamento
+	- colorir os dados consoante a velocidade (escolher uma gama de 4 velocidades e colorir os pontos com apenas essas 4 cores OU descobrir qual é a velocidade máxima e mínima e escalar os dados para um color map)
+	- descobrir quais são os points of interest (aqueles onde é dispendido mais tempo, ou seja, onde temos menor velocidade e onde há maior quantidade de medições)
+	- a apresentação é explicar tudo o que foi feito and how, bem como as conclusões que conseguimos retirar dos resultados obtidos
+
+
+
+HOW TO:
+
+- import CSV data 
+	-> no geometry
+- table join with shapefile locations 
+	-> by "Name" field
+- add each Time Delta Layer
+	- View Table
+	- select by function
+		-> "Fields and Values"
+			-> "Time_Delta_(s)"
+		-> show all unique
+		-> perform queries
+			-> 'Time_Delta_(s)' = 0
+	- Spatial query
+	- convert to points shapefile
+		-> vector -> geometry tools -> extract nodes
+
+- add each Velocity layer
+	-> pre-processing yelds peaks at 252.06, 175.38, 61.08, 35.52
+	-> pre-processing yelds histogram with relevant thresholds: 0, 1, 2, 2+
+
+
+- add categorized data according to automatic classifications
+	- do this for velocity and time_delta
+	-> properties -> style -> categorized -> classify -> select a color scheme
+
