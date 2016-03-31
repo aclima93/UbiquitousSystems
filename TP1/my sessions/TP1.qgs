@@ -33,7 +33,7 @@
         <customproperties/>
       </layer-tree-layer>
     </layer-tree-group>
-    <layer-tree-group expanded="1" checked="Qt::Unchecked" name="data">
+    <layer-tree-group expanded="1" checked="Qt::PartiallyChecked" name="data">
       <customproperties/>
       <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="session_136031_extra20160325005843650" name="session_136031_extra">
         <customproperties/>
@@ -44,7 +44,7 @@
       <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="session_136031_join_points20160325154546718" name="session_136031_join_points">
         <customproperties/>
       </layer-tree-layer>
-      <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="session_136031_join_buffer20160325162811895" name="session_136031_join_buffer">
+      <layer-tree-layer expanded="1" checked="Qt::Checked" id="session_136031_join_buffer20160325162811895" name="session_136031_join_buffer">
         <customproperties/>
       </layer-tree-layer>
       <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="session_136031_copy20160325010337243" name="session_136031_join">
@@ -59,13 +59,13 @@
       <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="Time_Delta_1_16_INTERSECT_DEI20160327225317266" name="Time_Delta_1.16_INTERSECT_DEI">
         <customproperties/>
       </layer-tree-layer>
-      <layer-tree-layer expanded="1" checked="Qt::Checked" id="join_points_INTERSECT_DEI20160327224004236" name="join_points_INTERSECT_DEI">
+      <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="join_points_INTERSECT_DEI20160327224004236" name="join_points_INTERSECT_DEI">
         <customproperties/>
       </layer-tree-layer>
-      <layer-tree-layer expanded="1" checked="Qt::Checked" id="join_points_INTERSECT_section_120160327224230450" name="join_points_INTERSECT_section_1">
+      <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="join_points_INTERSECT_section_120160327224230450" name="join_points_INTERSECT_section_1">
         <customproperties/>
       </layer-tree-layer>
-      <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="session_136031_join_points_copy20160327223302817" name="session_136031_join_points_HEATMAP">
+      <layer-tree-layer expanded="1" checked="Qt::Checked" id="session_136031_join_points_copy20160327223302817" name="session_136031_join_points_HEATMAP">
         <customproperties/>
       </layer-tree-layer>
     </layer-tree-group>
@@ -104,10 +104,10 @@
   <mapcanvas>
     <units>meters</units>
     <extent>
-      <xmin>-936836.90725785691756755</xmin>
-      <ymin>4892703.6236562542617321</ymin>
-      <xmax>-936291.19324253697413951</xmax>
-      <ymax>4893351.9720393680036068</ymax>
+      <xmin>-936927.97668482433073223</xmin>
+      <ymin>4892636.19624388590455055</ymin>
+      <xmax>-936384.59942652354948223</xmax>
+      <ymax>4893281.48976195231080055</ymax>
     </extent>
     <rotation>0</rotation>
     <projections>1</projections>
@@ -173,15 +173,15 @@
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_020160325144808084"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_020160325004027837"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="join_points_INTERSECT_section_120160327224230450"/>
-      <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_2_31_20160325134924410"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="join_points_INTERSECT_section_120160327223742458"/>
+      <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_2_31_20160325134924410"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="DEI_INTERSECT_Time_Delta_2_31_20160327224914011"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Velocity__0_1_20160325132157084"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="2014_02_23_Maps3D_routes_any20160316174854690"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_waypoints_any20160316174857673"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_track_points_any20160316174857713"/>
-      <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_join_buffer20160325162622546"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_join_points_copy20160327223302817"/>
+      <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_join_buffer20160325162622546"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Time_Delta_2_31_20160325144911770"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_routes_any20160316174857682"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="session_136031_join_buffer20160325162811895"/>
@@ -317,7 +317,7 @@
         </filegroup>
       </legendlayer>
     </legendgroup>
-    <legendgroup open="true" checked="Qt::Unchecked" name="data">
+    <legendgroup open="true" checked="Qt::PartiallyChecked" name="data">
       <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="session_136031_extra" showFeatureCount="0">
         <filegroup open="true" hidden="false">
           <legendlayerfile isInOverview="0" layerid="session_136031_extra20160325005843650" visible="0"/>
@@ -333,9 +333,9 @@
           <legendlayerfile isInOverview="0" layerid="session_136031_join_points20160325154546718" visible="0"/>
         </filegroup>
       </legendlayer>
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="session_136031_join_buffer" showFeatureCount="0">
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="session_136031_join_buffer" showFeatureCount="0">
         <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="session_136031_join_buffer20160325162811895" visible="0"/>
+          <legendlayerfile isInOverview="0" layerid="session_136031_join_buffer20160325162811895" visible="1"/>
         </filegroup>
       </legendlayer>
       <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="session_136031_join" showFeatureCount="0">
@@ -355,19 +355,19 @@
           <legendlayerfile isInOverview="0" layerid="Time_Delta_1_16_INTERSECT_DEI20160327225317266" visible="0"/>
         </filegroup>
       </legendlayer>
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="join_points_INTERSECT_DEI" showFeatureCount="0">
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="join_points_INTERSECT_DEI" showFeatureCount="0">
         <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="join_points_INTERSECT_DEI20160327224004236" visible="1"/>
+          <legendlayerfile isInOverview="0" layerid="join_points_INTERSECT_DEI20160327224004236" visible="0"/>
         </filegroup>
       </legendlayer>
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="join_points_INTERSECT_section_1" showFeatureCount="0">
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="join_points_INTERSECT_section_1" showFeatureCount="0">
         <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="join_points_INTERSECT_section_120160327224230450" visible="1"/>
+          <legendlayerfile isInOverview="0" layerid="join_points_INTERSECT_section_120160327224230450" visible="0"/>
         </filegroup>
       </legendlayer>
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="session_136031_join_points_HEATMAP" showFeatureCount="0">
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="session_136031_join_points_HEATMAP" showFeatureCount="0">
         <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="session_136031_join_points_copy20160327223302817" visible="0"/>
+          <legendlayerfile isInOverview="0" layerid="session_136031_join_points_copy20160327223302817" visible="1"/>
         </filegroup>
       </legendlayer>
     </legendgroup>
@@ -1813,14 +1813,14 @@ def my_form_open(dialog, layer, feature):
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <annotationform></annotationform>
+      <annotationform>.</annotationform>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <attributeactions/>
-      <editform></editform>
+      <editform>.</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath></editforminitfilepath>
+      <editforminitfilepath>.</editforminitfilepath>
       <editforminitcode><![CDATA[]]></editforminitcode>
       <featformsuppress>0</featformsuppress>
       <editorlayout>generatedlayout</editorlayout>
@@ -2088,14 +2088,14 @@ def my_form_open(dialog, layer, feature):
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <annotationform></annotationform>
+      <annotationform>.</annotationform>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <attributeactions/>
-      <editform></editform>
+      <editform>.</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath></editforminitfilepath>
+      <editforminitfilepath>.</editforminitfilepath>
       <editforminitcode><![CDATA[]]></editforminitcode>
       <featformsuppress>0</featformsuppress>
       <editorlayout>generatedlayout</editorlayout>
@@ -2635,14 +2635,14 @@ def my_form_open(dialog, layer, feature):
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <annotationform></annotationform>
+      <annotationform>.</annotationform>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <attributeactions/>
-      <editform></editform>
+      <editform>.</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath></editforminitfilepath>
+      <editforminitfilepath>.</editforminitfilepath>
       <editforminitcode><![CDATA[]]></editforminitcode>
       <featformsuppress>0</featformsuppress>
       <editorlayout>generatedlayout</editorlayout>
@@ -2774,14 +2774,14 @@ def my_form_open(dialog, layer, feature):
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <annotationform></annotationform>
+      <annotationform>.</annotationform>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <attributeactions/>
-      <editform></editform>
+      <editform>.</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath></editforminitfilepath>
+      <editforminitfilepath>.</editforminitfilepath>
       <editforminitcode><![CDATA[]]></editforminitcode>
       <featformsuppress>0</featformsuppress>
       <editorlayout>generatedlayout</editorlayout>
@@ -5974,7 +5974,7 @@ def my_form_open(dialog, layer, feature):
         <fieldstyles/>
       </conditionalstyles>
     </maplayer>
-    <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Point" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
+    <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Point" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
       <id>session_136031_join_points_copy20160327223302817</id>
       <datasource>../my data/session_136031/join_points/session_136031_join_points.shp</datasource>
       <shortname>session_136031_join_points copy</shortname>
@@ -6225,7 +6225,7 @@ def my_form_open(dialog, layer, feature):
         <selectedonly on=""/>
       </labelattributes>
       <SingleCategoryDiagramRenderer diagramType="Pie">
-        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" sizeType="MM" minScaleDenominator="-4.65661e-10">
+        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" sizeType="MM" minScaleDenominator="0">
           <fontProperties description=".SF NS Text,13,-1,5,50,0,0,0,0,0" style=""/>
           <attribute field="" color="#000000" label=""/>
         </DiagramCategory>
