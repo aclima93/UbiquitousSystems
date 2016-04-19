@@ -77,12 +77,14 @@ public class LoggingActivity extends AppCompatActivity {
                     FileWriter fw = new FileWriter(wifiLogsFile, true);
                     BufferedWriter bw = new BufferedWriter(fw);
                     PrintWriter out = new PrintWriter(bw);
-                    out.println(log);
 
+                    out.println(log);
+                    Log.d("Entry", log);
                     Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "IO Failure", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -94,20 +96,14 @@ public class LoggingActivity extends AppCompatActivity {
     /* Checks if external storage is available for read and write */
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     /* Checks if external storage is available to at least read */
     public boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 
     public File getStorageFile() {
@@ -116,10 +112,21 @@ public class LoggingActivity extends AppCompatActivity {
 
         if( isExternalStorageReadable() && isExternalStorageWritable() ) {
 
-            file = new File(Environment.getExternalStorageDirectory(), "wifi_logs.txt");
-            if (!file.mkdirs()) {
-                Log.e("Oops!", "File not created.");
+            File sdCard = Environment.getExternalStorageDirectory();
+            File dir = new File (sdCard.getAbsolutePath()+"/wifi_logs");
+            file = new File(dir, "wifi_logs.txt");
+
+            if(!dir.mkdirs() && !file.exists()) {
+                try {
+                    if (!file.createNewFile()) {
+                        Log.e("Oops!", "File not created.");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "IO Failure", Toast.LENGTH_SHORT).show();
+                }
             }
+
         }
 
         return file;
