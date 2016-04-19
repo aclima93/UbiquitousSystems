@@ -113,7 +113,7 @@ public class LoggingActivity extends AppCompatActivity {
         if( isExternalStorageReadable() && isExternalStorageWritable() ) {
 
             File sdCard = Environment.getExternalStorageDirectory();
-            File dir = new File (sdCard.getAbsolutePath()+"/wifi_logs");
+            File dir = new File (sdCard.getAbsolutePath() + "/wifi_logs");
             file = new File(dir, "wifi_logs.txt");
 
             if(!dir.mkdirs() && !file.exists()) {
