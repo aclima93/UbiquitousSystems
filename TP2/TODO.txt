@@ -2,6 +2,7 @@ TODO:
 - fazer 1 minuto de medições em cada calibration point
 - repetir medições para Norte, Sul, Este, Oeste
 - fazer média das medições (em cada direcção) para determinar a footprint
+- usar magnetómetro do smartphone para determinar direcção 
 - fazer algoritmo de pattern matching que procura identificar total ou parcialmente em que ponto de calibração encaixa a medição actual
 
 - recolher um log de uma visita para os testes
