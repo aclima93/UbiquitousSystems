@@ -14,44 +14,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        android:gravity="center"
         android:weightSum="1.0">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="From: "
+            android:text="Location:"
             android:layout_weight="0.5"
-            android:gravity="end"/>
+            android:gravity="center"/>
 
         <TextView
-            android:id="@+id/prev_location_tv"
+            android:id="@+id/location_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:gravity="start"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1.0">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="To: "
-            android:layout_weight="0.5"
-            android:gravity="end"/>
-
-        <TextView
-            android:id="@+id/next_location_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:gravity="start"/>
+            android:gravity="center"/>
 
     </LinearLayout>
 
