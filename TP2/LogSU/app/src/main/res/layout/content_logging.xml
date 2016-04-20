@@ -15,6 +15,7 @@
 
     <EditText
         android:id="@+id/cur_location_etv"
+        android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Write the current location Tag here"/>

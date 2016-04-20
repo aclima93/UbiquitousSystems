@@ -18,11 +18,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 public class LoggingActivity extends AppCompatActivity {
 
     File wifiLogsFile;
+    int successCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,55 +38,66 @@ public class LoggingActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    addSignal();
+                    addSignals();
                 }
             });
         }
 
-
     }
 
-    private void addSignal() {
+    private void addSignals() {
 
-        //TODO: add magnetometer information to log
+        successCounter = 0;
 
-        EditText editText = (EditText) findViewById(R.id.cur_location_etv);
-        String location = (editText != null ? editText.getText().toString() : null);
+        while(successCounter < 30) {
 
-        if(location == null){
-            Toast.makeText(getApplicationContext(), "Missing Location", Toast.LENGTH_SHORT).show();
-            return;
-        }
+            //TODO: add magnetometer information to log
+
+            EditText editText = (EditText) findViewById(R.id.cur_location_etv);
+            String location = (editText != null ? editText.getText().toString() : null);
+
+            if (location == null) {
+                Toast.makeText(getApplicationContext(), "Missing Location", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
 
-        final WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        int state = wifi.getWifiState();
+            final WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
-        if(state == WifiManager.WIFI_STATE_ENABLED) {
+            if (wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
 
-            List<ScanResult> results = wifi.getScanResults();
-            for (ScanResult result : results) {
+                for (ScanResult result : wifi.getScanResults()) {
 
-                int rssi = wifi.getConnectionInfo().getRssi();
-                int level = WifiManager.calculateSignalLevel(rssi, result.level);
-                int difference = level * 100 / result.level;
+                    int rssi = wifi.getConnectionInfo().getRssi(); // received signal strength indicator in dBm
+                    int signalStrength = WifiManager.calculateSignalLevel(rssi, result.level);
 
-                String log = rssi + "," + location + "," + difference;
+                    String log = result.BSSID + "," + signalStrength + "," + location;
 
-                try {
-                    FileWriter fw = new FileWriter(wifiLogsFile, true);
-                    BufferedWriter bw = new BufferedWriter(fw);
-                    PrintWriter out = new PrintWriter(bw);
+                    try {
+                        FileWriter fw = new FileWriter(wifiLogsFile, true);
+                        BufferedWriter bw = new BufferedWriter(fw);
+                        PrintWriter out = new PrintWriter(bw);
 
-                    out.println(log);
-                    Log.d("Entry", log);
-                    Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                        out.println(log);
+                        Log.d("Entry", log);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "IO Failure", Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "IO Failure", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
+                successCounter++;
+                Toast.makeText(getApplicationContext(), "Success #" + successCounter, Toast.LENGTH_SHORT).show();
+
+            }
+
+            // sleep for a little bit
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
         }
