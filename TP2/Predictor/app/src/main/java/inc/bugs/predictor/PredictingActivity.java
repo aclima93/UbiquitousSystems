@@ -17,6 +17,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PredictingActivity extends AppCompatActivity {
 
@@ -75,22 +79,66 @@ public class PredictingActivity extends AppCompatActivity {
 
         if(wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
 
-            String bssid = wifi.getConnectionInfo().getBSSID(); // basic service set identifier
             Integer signalStrength = wifi.getConnectionInfo().getRssi(); // received signal strength indicator in dBm
 
+            ArrayList<WifiDistance> distances = new ArrayList<>();
 
             // calculate euclidean distance to each measurement
+            for(WifiMeasurement wifiMeasurement : measurements){
+                distances.add(new WifiDistance(signalStrength, wifiMeasurement));
+            }
 
             // sort by distance
+            Collections.sort(distances, new Comparator<WifiDistance>() {
+                @Override
+                public int compare(WifiDistance o1, WifiDistance o2) {
+                    return o1.getDistance().compareTo(o2.getDistance());
+                }
+            });
 
-            // return most frequent location
+            // add up what class each neighbour belongs to
+            HashMap<String, Integer> counter = new HashMap<>();
+            for(int i=0; i<numberOfNeighbours; i++) {
+                String location = distances.get(i).getWifiMeasurement().getLocation();
+                if (counter.containsKey(location)){
+                    counter.put(location, counter.get(location) + 1);
+                }
+                else {
+                    counter.put(location, 1);
+                }
+            }
 
-            //return measurements.get(bssid).get(signalStrength);
+            // return most frequent location of the K neighbours
+            ArrayList<String> mostFrequentLocations = new ArrayList<>();
+            int mostFrequentCount = 0;
+
+            for(Map.Entry<String, Integer> entryLocation : counter.entrySet()){
+
+                if(entryLocation.getValue() > mostFrequentCount) {
+                    mostFrequentCount = entryLocation.getValue();
+                    mostFrequentLocations = new ArrayList<>();
+                    mostFrequentLocations.add(entryLocation.getKey());
+                }
+                else if(entryLocation.getValue() == mostFrequentCount) {
+                    mostFrequentLocations.add(entryLocation.getKey());
+                }
+            }
+
+            if(mostFrequentLocations.size() > 0){
+
+                String joinedLocations = mostFrequentLocations.get(0);
+                mostFrequentLocations.remove(0);
+
+                for(String location : mostFrequentLocations){
+                    joinedLocations += ", " + location;
+                }
+
+                return joinedLocations;
+            }
 
         }
 
         return "Not defined";
-
     }
 
     private void createRefTable() {

@@ -12,12 +12,6 @@ public class WifiMeasurement {
     private String BSSID;
     private String location;
 
-    WifiMeasurement(int signalStrength, String BSSID, String location){
-        this.signalStrength = signalStrength;
-        this.BSSID = BSSID;
-        this.location = location;
-    }
-
     WifiMeasurement(String csvLine){
 
         // parse logged line
@@ -38,11 +32,6 @@ public class WifiMeasurement {
 
     public String getLocation() {
         return location;
-    }
-
-    @Override
-    public String toString(){
-        return signalStrength + "," + BSSID + "," + location;
     }
 
 }
