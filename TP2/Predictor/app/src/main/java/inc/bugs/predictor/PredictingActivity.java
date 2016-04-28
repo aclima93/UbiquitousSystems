@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,14 +17,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 
 public class PredictingActivity extends AppCompatActivity {
 
-    // BSSID > Signal Strength > Location
-    HashMap<String, HashMap<Integer, String> > referenceTable;
+    ArrayList<WifiMeasurement> measurements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,48 +29,73 @@ public class PredictingActivity extends AppCompatActivity {
 
         createRefTable();
 
-        while(true){
+        TextView locationTextView = ((TextView) findViewById(R.id.location_tv));
+        if (locationTextView != null) {
+            EditText numberOfNeighboursEditText = (EditText) findViewById(R.id.number_of_neighbours_etv);
 
-            matchCurrentSignal();
+            if (numberOfNeighboursEditText != null) {
 
-            // sleep for a little bit
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                while (true) {
+
+                    try {
+                        int numberOfNeighbours = Integer.valueOf(numberOfNeighboursEditText.getText().toString());
+
+                        if (numberOfNeighbours > measurements.size()) {
+                            numberOfNeighbours = measurements.size();
+                        } else if (numberOfNeighbours < 1) {
+                            numberOfNeighbours = 1;
+                        }
+
+                        String location = matchCurrentSignal(numberOfNeighbours);
+
+                        locationTextView.setText(location);
+
+                    } catch (NumberFormatException e) {
+                        locationTextView.setText("Invalid number of neighbours.");
+                    }
+
+                    // sleep for a little bit
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
             }
+
         }
 
     }
 
-    private void matchCurrentSignal() {
-        
+    private String matchCurrentSignal(int numberOfNeighbours) {
+
         final WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
         if(wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
 
             String bssid = wifi.getConnectionInfo().getBSSID(); // basic service set identifier
             Integer signalStrength = wifi.getConnectionInfo().getRssi(); // received signal strength indicator in dBm
-            String location;
 
-            try {
-                location = referenceTable.get(bssid).get(signalStrength);
-            }
-            catch (Exception e){
-                location = "Not defined";
-            }
 
-            TextView locationTextView = ((TextView) findViewById(R.id.location_tv));
-            if (locationTextView != null) {
-                locationTextView.setText(location);
-            }
+            // calculate euclidean distance to each measurement
+
+            // sort by distance
+
+            // return most frequent location
+
+            //return measurements.get(bssid).get(signalStrength);
+
         }
+
+        return "Not defined";
 
     }
 
     private void createRefTable() {
 
-        referenceTable = new HashMap<>();
+        measurements = new ArrayList<>();
 
         File wifiLogsFile = getStorageFile();
         ArrayList<String> lines = new ArrayList<>();
@@ -84,67 +106,8 @@ public class PredictingActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "IO Failure", Toast.LENGTH_SHORT).show();
         }
 
-        // BSSID > Signal Strength > Location
-        HashMap<String, HashMap<Integer, ArrayList<String>> > logsTable = new HashMap<>();
-
         for(String line : lines) {
-
-            // parse logged line
-            ArrayList<String> parsedLine = (ArrayList<String>) Arrays.asList(line.split(","));
-            String bssid = parsedLine.get(0);
-            Integer signalStrength = Integer.parseInt( parsedLine.get( 1 ) );
-            String location = parsedLine.get(2);
-
-            // init/retrive data
-            HashMap<Integer, ArrayList<String>> signalStrengthList = logsTable.get(bssid);
-            if( signalStrengthList == null || signalStrengthList.size() == 0 ) {
-                signalStrengthList = new HashMap<>();
-            }
-            ArrayList<String> locations = signalStrengthList.get(location);
-            if( locations == null || locations.size() == 0 ) {
-                locations = new ArrayList<>();
-            }
-
-            // update table
-            locations.add(location);
-            signalStrengthList.put(signalStrength, locations);
-            logsTable.put(bssid, signalStrengthList);
-
-        }
-
-        // calculate average signal strength
-
-        for( String bssid : logsTable.keySet() ){
-
-            for(Integer signalStrength : logsTable.get(bssid).keySet() ){
-
-                ArrayList<String> locationList = logsTable.get(bssid).get(signalStrength);
-                ArrayList<String> uniqueLocations = new ArrayList<>( new HashSet<>(locationList) );
-                Integer[] locationCounter = new Integer[uniqueLocations.size()];
-
-                // count frequency of each location for this BSSID and SignalStrength
-                for(int i=0; i< locationList.size(); i++){
-                    locationCounter[ uniqueLocations.indexOf(locationList.get(i)) ]++;
-                }
-
-                // determine most frequent
-                int mostFrequent = 0;
-                for(int i=0; i< locationCounter.length; i++){
-                    if(locationCounter[mostFrequent] > locationCounter[i]){
-                        mostFrequent = i;
-                    }
-                }
-
-                HashMap<Integer, String> locationForSignalStrength = referenceTable.get(bssid);
-                if( locationForSignalStrength == null || locationForSignalStrength.size() == 0 ) {
-                    locationForSignalStrength= new HashMap<>();
-                }
-
-                locationForSignalStrength.put(signalStrength, uniqueLocations.get(mostFrequent));
-                referenceTable.put(bssid, locationForSignalStrength);
-
-            }
-
+            measurements.add( new WifiMeasurement(line) );
         }
 
     }

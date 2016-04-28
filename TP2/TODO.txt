@@ -10,9 +10,9 @@ TODO:
 para o KNN:
 - um valor de K ímpar ajuda no desempate da votação (3 costuma funcionar, mas testar 1,3, 5 e 7)
 
-para a base de dados de fingerprinting:
+para a base de dados de fingerprinting no WEKA:
+- testar com o KNN
 - testar para árvores de decisão
-- testar com o WEKA
 - testar com técnicas de pattern matching
 
 ver os slides sobre "WLAN fingerprinting" (têm dicas sobre o trabalho)

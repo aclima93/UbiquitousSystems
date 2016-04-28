@@ -61,7 +61,6 @@ public class LoggingActivity extends AppCompatActivity {
                 return;
             }
 
-
             final WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
             if (wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
@@ -71,7 +70,7 @@ public class LoggingActivity extends AppCompatActivity {
                     int rssi = wifi.getConnectionInfo().getRssi(); // received signal strength indicator in dBm
                     int signalStrength = WifiManager.calculateSignalLevel(rssi, result.level);
 
-                    String log = result.BSSID + "," + signalStrength + "," + location;
+                    String log = new WifiMeasurement(signalStrength, result.BSSID, location).toString();
 
                     try {
                         FileWriter fw = new FileWriter(wifiLogsFile, true);
