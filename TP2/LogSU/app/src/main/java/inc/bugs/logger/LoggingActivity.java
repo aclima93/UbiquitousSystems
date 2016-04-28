@@ -15,19 +15,25 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Surface;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoggingActivity extends AppCompatActivity {
 
     EditText editText;
+    FloatingActionButton fab;
+
     File wifiLogsFile;
+    ArrayList<WifiMeasurement> measurements;
+
     private SensorEventListener mSensorEventListener;
     String orientation;
     int successCounter;
@@ -69,8 +75,7 @@ public class LoggingActivity extends AppCompatActivity {
                         // Compensate device orientation
                         // http://android-developers.blogspot.de/2010/09/one-screen-turn-deserves-another.html
                         float[] remappedRotationMatrix = new float[9];
-                        switch (getWindowManager().getDefaultDisplay()
-                                .getRotation()) {
+                        switch (getWindowManager().getDefaultDisplay().getRotation()) {
                             case Surface.ROTATION_0:
                                 SensorManager.remapCoordinateSystem(rotationMatrix,
                                         SensorManager.AXIS_X, SensorManager.AXIS_Y,
@@ -97,8 +102,7 @@ public class LoggingActivity extends AppCompatActivity {
 
                         // Calculate Orientation
                         float results[] = new float[3];
-                        SensorManager.getOrientation(remappedRotationMatrix,
-                                results);
+                        SensorManager.getOrientation(remappedRotationMatrix, results);
 
                         // Get measured value
                         float current_measured_bearing = (float) (results[0] * 180 / Math.PI);
@@ -106,13 +110,13 @@ public class LoggingActivity extends AppCompatActivity {
                             current_measured_bearing += 360;
                         }
 
-                        if(current_measured_bearing >= 0 && current_measured_bearing < 90){
+                        if( (current_measured_bearing >= 315 && current_measured_bearing <= 360) || (current_measured_bearing >= 0 && current_measured_bearing < 45) ){
                             orientation = "N";
                         }
-                        else if(current_measured_bearing >= 90 && current_measured_bearing < 180){
+                        else if(current_measured_bearing >= 45 && current_measured_bearing < 135){
                             orientation = "E";
                         }
-                        else if(current_measured_bearing >= 90 && current_measured_bearing < 180){
+                        else if(current_measured_bearing >= 135 && current_measured_bearing < 225){
                             orientation = "S";
                         }
                         else{
@@ -126,14 +130,31 @@ public class LoggingActivity extends AppCompatActivity {
 
         initSensors();
 
-        EditText editText = (EditText) findViewById(R.id.cur_location_etv);
+        Button resetButton = (Button) findViewById(R.id.reset_btn);
+        assert resetButton != null;
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                while( wifiLogsFile.exists() ){
+                    if(wifiLogsFile.delete()) {
+                        break;
+                    }
+                }
+                wifiLogsFile = getStorageFile();
+            }
+        });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        editText = (EditText) findViewById(R.id.cur_location_etv);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    fab.setVisibility(View.GONE);
                     addSignals();
+                    fab.setVisibility(View.VISIBLE);
                 }
             });
         }
@@ -144,18 +165,19 @@ public class LoggingActivity extends AppCompatActivity {
 
         successCounter = 0;
 
+        String location = (editText != null ? editText.getText().toString() : null);
+
+        if (location == null) {
+            Toast.makeText(getApplicationContext(), "Missing Location", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        location += " - " + orientation;
+
+        final WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+
+        measurements = new ArrayList<>();
         while(successCounter < 30) {
-
-            String location = (editText != null ? editText.getText().toString() : null);
-
-            if (location == null) {
-                Toast.makeText(getApplicationContext(), "Missing Location", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            location += " - " + orientation;
-
-            final WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
             if (wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
 
@@ -163,42 +185,78 @@ public class LoggingActivity extends AppCompatActivity {
 
                     int signalStrength = wifi.getConnectionInfo().getRssi(); // received signal strength indicator in dBm
 
-                    String log = new WifiMeasurement(signalStrength, result.BSSID, location).toString();
-
-                    try {
-                        FileWriter fw = new FileWriter(wifiLogsFile, true);
-                        BufferedWriter bw = new BufferedWriter(fw);
-                        PrintWriter out = new PrintWriter(bw);
-
-                        out.println(log);
-                        Log.d("Entry", log);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "IO Failure", Toast.LENGTH_SHORT).show();
-                    }
+                    measurements.add(new WifiMeasurement(signalStrength, result.BSSID, location));
 
                 }
 
                 successCounter++;
-                Toast.makeText(getApplicationContext(), "Success #" + successCounter, Toast.LENGTH_SHORT).show();
+
+                // sleep for a little bit for more diverse measurements
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
             }
-
-            // sleep for a little bit
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            else{
+                Toast.makeText(getApplicationContext(), "Turn on WiFi", Toast.LENGTH_SHORT).show();
+                return;
             }
 
+        }
+
+        HashMap<String, Integer> counter = new HashMap<>();
+        for(WifiMeasurement measurement : measurements) {
+
+            String key = measurement.toString();
+
+            if (counter.containsKey(key)){
+                counter.put(key, counter.get(key) + 1);
+            }
+            else {
+                counter.put(key, 1);
+            }
+        }
+
+        // return most frequent location of the K neighbours
+        ArrayList<String> mostFrequentMeasurement = new ArrayList<>();
+        int mostFrequentCount = 0;
+
+        for(Map.Entry<String, Integer> measurementCounter : counter.entrySet()){
+
+            if(measurementCounter.getValue() > mostFrequentCount) {
+                mostFrequentCount = measurementCounter.getValue();
+                mostFrequentMeasurement = new ArrayList<>();
+                mostFrequentMeasurement.add(measurementCounter.getKey());
+            }
+            else if(measurementCounter.getValue() == mostFrequentCount) {
+                mostFrequentMeasurement.add(measurementCounter.getKey());
+            }
+        }
+
+        try{
+
+            for(String measurement : mostFrequentMeasurement) {
+
+                FileOutputStream fileOutputStream = new FileOutputStream(wifiLogsFile, true);
+                fileOutputStream.write(measurement.getBytes());
+                fileOutputStream.close();
+
+                Log.d("Entry", measurement);
+            }
+
+            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "IO Failure", Toast.LENGTH_SHORT).show();
         }
 
     }
 
     /**
-     * Initialize the Sensors (Gravity and magnetic field, required as a compass
-     * sensor)
+     * Initialize the Sensors (Gravity and magnetic field, required as a compass sensor)
      */
     private void initSensors() {
 
@@ -242,7 +300,7 @@ public class LoggingActivity extends AppCompatActivity {
 
         if( isExternalStorageReadable() && isExternalStorageWritable() ) {
 
-            File sdCard = Environment.getExternalStorageDirectory();
+            File sdCard = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
             File dir = new File (sdCard.getAbsolutePath() + "/wifi_logs");
             file = new File(dir, "wifi_logs.txt");
 

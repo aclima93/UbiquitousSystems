@@ -13,11 +13,29 @@
     tools:context="inc.bugs.logger.LoggingActivity"
     tools:showIn="@layout/activity_logging">
 
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimary"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:layout_centerInParent="true"/>
+
     <EditText
         android:id="@+id/cur_location_etv"
-        android:layout_centerInParent="true"
+        android:layout_above="@id/separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Write the current location Tag here"/>
+    
+    <Button
+        android:id="@+id/reset_btn"
+        android:layout_below="@id/separator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Reset Logs"/>
 
 </RelativeLayout>

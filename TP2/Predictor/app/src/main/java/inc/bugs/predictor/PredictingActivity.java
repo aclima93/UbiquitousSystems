@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
@@ -33,13 +34,16 @@ public class PredictingActivity extends AppCompatActivity {
 
         createRefTable();
 
-        TextView locationTextView = ((TextView) findViewById(R.id.location_tv));
-        if (locationTextView != null) {
-            EditText numberOfNeighboursEditText = (EditText) findViewById(R.id.number_of_neighbours_etv);
+        final EditText numberOfNeighboursEditText = (EditText) findViewById(R.id.number_of_neighbours_etv);
+        final TextView locationTextView = ((TextView) findViewById(R.id.location_tv));
 
-            if (numberOfNeighboursEditText != null) {
+        if (locationTextView != null && numberOfNeighboursEditText != null) {
 
-                while (true) {
+            final Handler h = new Handler();
+            final int delay = 1000; //milliseconds
+
+            h.postDelayed(new Runnable(){
+                public void run(){
 
                     try {
                         int numberOfNeighbours = Integer.valueOf(numberOfNeighboursEditText.getText().toString());
@@ -51,23 +55,16 @@ public class PredictingActivity extends AppCompatActivity {
                         }
 
                         String location = matchCurrentSignal(numberOfNeighbours);
-
-                        locationTextView.setText(location);
+                        Log.d("Entry", location);
+                        locationTextView.setText( location );
 
                     } catch (NumberFormatException e) {
                         locationTextView.setText("Invalid number of neighbours.");
                     }
 
-                    // sleep for a little bit
-                    try {
-                        Thread.sleep(250);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
+                    h.postDelayed(this, delay);
                 }
-
-            }
+            }, delay);
 
         }
 
@@ -99,7 +96,9 @@ public class PredictingActivity extends AppCompatActivity {
             // add up what class each neighbour belongs to
             HashMap<String, Integer> counter = new HashMap<>();
             for(int i=0; i<numberOfNeighbours; i++) {
+
                 String location = distances.get(i).getWifiMeasurement().getLocation();
+
                 if (counter.containsKey(location)){
                     counter.put(location, counter.get(location) + 1);
                 }
@@ -137,6 +136,9 @@ public class PredictingActivity extends AppCompatActivity {
             }
 
         }
+        else{
+            Toast.makeText(getApplicationContext(), "Turn on WiFi", Toast.LENGTH_SHORT).show();
+        }
 
         return "Not defined";
     }
@@ -160,12 +162,6 @@ public class PredictingActivity extends AppCompatActivity {
 
     }
 
-    /* Checks if external storage is available for read and write */
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state);
-    }
-
     /* Checks if external storage is available to at least read */
     public boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
@@ -177,9 +173,9 @@ public class PredictingActivity extends AppCompatActivity {
 
         File file = null;
 
-        if( isExternalStorageReadable() && isExternalStorageWritable() ) {
+        if( isExternalStorageReadable() ) {
 
-            File sdCard = Environment.getExternalStorageDirectory();
+            File sdCard = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
             File dir = new File (sdCard.getAbsolutePath() + "/wifi_logs");
             file = new File(dir, "wifi_logs.txt");
 

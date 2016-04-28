@@ -15,10 +15,13 @@ public class WifiMeasurement {
     WifiMeasurement(String csvLine){
 
         // parse logged line
-        ArrayList<String> parsedLine = (ArrayList<String>) Arrays.asList(csvLine.split(","));
-        this.BSSID = parsedLine.get(0);
-        this.signalStrength = Integer.parseInt( parsedLine.get( 1 ) );
-        this.location = parsedLine.get(2);
+        ArrayList<String> parsedLine = new ArrayList<>();
+        parsedLine.addAll(Arrays.asList(csvLine.split(",")));
+
+        int idx = 0;
+        this.signalStrength = Integer.parseInt( parsedLine.get( idx++ ) );
+        this.BSSID = parsedLine.get(idx++);
+        this.location = parsedLine.get(idx++);
 
     }
 

@@ -17,6 +17,6 @@ public class WifiMeasurement {
 
     @Override
     public String toString(){
-        return signalStrength + "," + BSSID + "," + location;
+        return signalStrength + "," + BSSID + "," + location + "\n";
     }
 }
