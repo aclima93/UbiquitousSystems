@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/colorPrimary"
-        android:layout_margin="5dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
         android:layout_centerInParent="true"/>
 
     <LinearLayout
@@ -36,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
+            android:gravity="center"
             android:text="3"/>
 
     </LinearLayout>
