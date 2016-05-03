@@ -13,10 +13,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Surface;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -24,18 +26,27 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class LoggingActivity extends AppCompatActivity {
+public class LoggingActivity extends AppCompatActivity implements SensorEventListener, AdapterView.OnItemSelectedListener {
 
-    EditText editText;
+    TextView orientationTextView;
+
     FloatingActionButton fab;
+
+    SensorManager sensorManager;
+    Sensor accelerometerSensor;
+    Sensor magnetometerSensor;
+    float[] gravityValues;
+    float[] geomagneticValues;
+
+    String location;
+    String orientation;
 
     File wifiLogsFile;
     ArrayList<WifiMeasurement> measurements;
 
-    private SensorEventListener mSensorEventListener;
-    String orientation;
     int successCounter;
 
     @Override
@@ -45,90 +56,11 @@ public class LoggingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
         wifiLogsFile = getStorageFile();
-        mSensorEventListener = new SensorEventListener() {
-
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            }
-
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-
-                float[] mGravity = null;
-                float[] mMagnetic = null;
-
-                if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
-                    mGravity = event.values.clone();
-                }
-                if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-                    mMagnetic = event.values.clone();
-                }
-
-                if (mGravity != null && mMagnetic != null) {
-
-                    // Create rotation Matrix
-                    float[] rotationMatrix = new float[9];
-                    if (SensorManager.getRotationMatrix(rotationMatrix, null,
-                            mGravity, mMagnetic)) {
-
-                        // Compensate device orientation
-                        // http://android-developers.blogspot.de/2010/09/one-screen-turn-deserves-another.html
-                        float[] remappedRotationMatrix = new float[9];
-                        switch (getWindowManager().getDefaultDisplay().getRotation()) {
-                            case Surface.ROTATION_0:
-                                SensorManager.remapCoordinateSystem(rotationMatrix,
-                                        SensorManager.AXIS_X, SensorManager.AXIS_Y,
-                                        remappedRotationMatrix);
-                                break;
-                            case Surface.ROTATION_90:
-                                SensorManager.remapCoordinateSystem(rotationMatrix,
-                                        SensorManager.AXIS_Y,
-                                        SensorManager.AXIS_MINUS_X,
-                                        remappedRotationMatrix);
-                                break;
-                            case Surface.ROTATION_180:
-                                SensorManager.remapCoordinateSystem(rotationMatrix,
-                                        SensorManager.AXIS_MINUS_X,
-                                        SensorManager.AXIS_MINUS_Y,
-                                        remappedRotationMatrix);
-                                break;
-                            case Surface.ROTATION_270:
-                                SensorManager.remapCoordinateSystem(rotationMatrix,
-                                        SensorManager.AXIS_MINUS_Y,
-                                        SensorManager.AXIS_X, remappedRotationMatrix);
-                                break;
-                        }
-
-                        // Calculate Orientation
-                        float results[] = new float[3];
-                        SensorManager.getOrientation(remappedRotationMatrix, results);
-
-                        // Get measured value
-                        float current_measured_bearing = (float) (results[0] * 180 / Math.PI);
-                        if (current_measured_bearing < 0) {
-                            current_measured_bearing += 360;
-                        }
-
-                        if( (current_measured_bearing >= 315 && current_measured_bearing <= 360) || (current_measured_bearing >= 0 && current_measured_bearing < 45) ){
-                            orientation = "N";
-                        }
-                        else if(current_measured_bearing >= 45 && current_measured_bearing < 135){
-                            orientation = "E";
-                        }
-                        else if(current_measured_bearing >= 135 && current_measured_bearing < 225){
-                            orientation = "S";
-                        }
-                        else{
-                            orientation = "W";
-                        }
-
-                    }
-                }
-            }
-        };
-
-        initSensors();
 
         Button resetButton = (Button) findViewById(R.id.reset_btn);
         assert resetButton != null;
@@ -144,8 +76,33 @@ public class LoggingActivity extends AppCompatActivity {
             }
         });
 
-        editText = (EditText) findViewById(R.id.cur_location_etv);
+        orientationTextView = (TextView) findViewById(R.id.cur_orientation_tv);
+        Spinner locationSpinner = (Spinner) findViewById(R.id.cur_location_spinner);
 
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<>();
+        categories.add("A");
+        categories.add("B");
+        categories.add("C");
+        categories.add("D1");
+        categories.add("D2");
+        categories.add("D3");
+        categories.add("E");
+        categories.add("G");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner + click listener
+        if (locationSpinner != null) {
+            locationSpinner.setOnItemSelectedListener(this);
+            locationSpinner.setAdapter(dataAdapter);
+        }
+
+        // floating action button
         fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
@@ -161,18 +118,28 @@ public class LoggingActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // On selecting a spinner item
+        location = parent.getItemAtPosition(position).toString();
+    }
+
+    public void onNothingSelected(AdapterView<?> arg0) { }
+
     private void addSignals() {
 
         successCounter = 0;
-
-        String location = (editText != null ? editText.getText().toString() : null);
 
         if (location == null) {
             Toast.makeText(getApplicationContext(), "Missing Location", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (orientation == null){
+            Toast.makeText(getApplicationContext(), "Turn on Compass", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        location += " - " + orientation;
+        String locationAndOrientation = location + " - " + orientation;
 
         final WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
@@ -185,7 +152,7 @@ public class LoggingActivity extends AppCompatActivity {
 
                     int signalStrength = wifi.getConnectionInfo().getRssi(); // received signal strength indicator in dBm
 
-                    measurements.add(new WifiMeasurement(signalStrength, result.BSSID, location));
+                    measurements.add(new WifiMeasurement(signalStrength, result.BSSID, locationAndOrientation));
 
                 }
 
@@ -255,27 +222,19 @@ public class LoggingActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Initialize the Sensors (Gravity and magnetic field, required as a compass sensor)
-     */
-    private void initSensors() {
-
-        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        Sensor mSensorGravity = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-        Sensor mSensorMagneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-
-        // Initialize the gravity sensor
-        if (mSensorGravity != null) {
-            Log.i("Grav", "Gravity sensor available. (TYPE_GRAVITY)");
-            sensorManager.registerListener(mSensorEventListener, mSensorGravity, SensorManager.SENSOR_DELAY_GAME);
-        }
-
-        // Initialize the magnetic field sensor
-        if (mSensorMagneticField != null) {
-            Log.i("Mag", "Magnetic field sensor available. (TYPE_MAGNETIC_FIELD)");
-            sensorManager.registerListener(mSensorEventListener, mSensorMagneticField, SensorManager.SENSOR_DELAY_GAME);
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(this, magnetometerSensor, SensorManager.SENSOR_DELAY_UI);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
 
     /**
      *  Checks if external storage is available for read and write
@@ -320,4 +279,52 @@ public class LoggingActivity extends AppCompatActivity {
         return file;
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            gravityValues = event.values;
+        }
+        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            geomagneticValues = event.values;
+        }
+
+        if (gravityValues != null && geomagneticValues != null) {
+
+            float R[] = new float[9];
+            float I[] = new float[9];
+            boolean success = SensorManager.getRotationMatrix(R, I, gravityValues, geomagneticValues);
+
+            if (success) {
+
+                // orientations contains: azimuth, pitch and roll
+                float orientations[] = new float[3];
+                SensorManager.getOrientation(R, orientations);
+
+                int azimuth = (int) (orientations[0] * 180 / Math.PI);
+                azimuth = azimuth % 360; // value between [0, 360[ for easier verification
+
+                if( (azimuth >= 315 && azimuth < 360) || (azimuth >= 0 && azimuth < 45) ){
+                    orientation = "N";
+                }
+                else if(azimuth >= 45 && azimuth < 135){
+                    orientation = "E";
+                }
+                else if(azimuth >= 135 && azimuth < 225){
+                    orientation = "S";
+                }
+                else{
+                    orientation = "W";
+                }
+
+                orientationTextView.setText(orientation);
+            }
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }
