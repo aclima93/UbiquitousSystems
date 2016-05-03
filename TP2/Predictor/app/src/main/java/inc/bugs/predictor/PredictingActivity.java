@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,9 +36,10 @@ public class PredictingActivity extends AppCompatActivity {
         createRefTable();
 
         final EditText numberOfNeighboursEditText = (EditText) findViewById(R.id.number_of_neighbours_etv);
-        final TextView locationTextView = ((TextView) findViewById(R.id.location_tv));
+        final TextView locationTextView = (TextView) findViewById(R.id.location_tv);
+        final ImageView locationImageView = (ImageView) findViewById(R.id.location_img);
 
-        if (locationTextView != null && numberOfNeighboursEditText != null) {
+        if (locationTextView != null && locationImageView != null && numberOfNeighboursEditText != null) {
 
             final Handler h = new Handler();
             final int delay = 1000; //milliseconds
@@ -54,12 +56,76 @@ public class PredictingActivity extends AppCompatActivity {
                             numberOfNeighbours = 1;
                         }
 
-                        String location = matchCurrentSignal(numberOfNeighbours);
-                        Log.d("Entry", location);
-                        locationTextView.setText( location );
+                        ArrayList<String> predictedLocations = matchCurrentSignal(numberOfNeighbours);
+                        String predictedLocation = null;
+
+                        if(predictedLocations != null && predictedLocations.size() > 0){
+
+                            predictedLocation = predictedLocations.get(0);
+                            predictedLocations.remove(0);
+
+                            for(String location : predictedLocations){
+                                predictedLocation += ", " + location;
+                            }
+                        }
+
+                        if (predictedLocation == null){
+
+                            locationTextView.setText( "Unknown Location.");
+                            locationImageView.setImageResource(R.drawable._default);
+
+                        }
+
+                        else {
+
+                            Log.d("Entry", predictedLocation);
+                            locationTextView.setText(predictedLocation);
+
+
+                            String predictedLocationImg;
+                            /*
+                             *  Check only the first two most frequent predicted locations
+                             *  because we don't have generated images for all n-combinations.
+                             */
+                            if( predictedLocations.size() >= 2 ) {
+                                String location1 = predictedLocations.get(0).split(" - ")[0];
+                                String location2 = predictedLocations.get(1).split(" - ")[0];
+
+                                if (location1.compareTo(location2) < 0){
+                                    predictedLocationImg = location1 + "_" + location2;
+                                }
+                                else {
+                                    predictedLocationImg = location2 + "_" + location1;
+                                }
+
+                            }
+                            else{
+                                predictedLocationImg = predictedLocations.get(0).split(" - ")[0];
+                            }
+
+                            int imageId;
+                            switch (predictedLocationImg){
+
+                                case "A_B" :imageId = R.drawable.a_b; break;
+                                case "A_D" :imageId = R.drawable.a_d; break;
+                                case "B_C" :imageId = R.drawable.b_c; break;
+                                case "B_D" :imageId = R.drawable.b_d; break;
+                                case "C_D" :imageId = R.drawable.c_d; break;
+                                case "C_E" :imageId = R.drawable.c_e; break;
+                                case "D_E" :imageId = R.drawable.d_e; break;
+                                case "D_G" :imageId = R.drawable.d_g; break;
+                                case "E_G" :imageId = R.drawable.e_g; break;
+
+                                default: imageId = R.drawable._default;
+                            }
+
+                            locationImageView.setImageResource(imageId);
+                        }
 
                     } catch (NumberFormatException e) {
+
                         locationTextView.setText("Invalid number of neighbours.");
+                        locationImageView.setImageResource(R.drawable._default);
                     }
 
                     h.postDelayed(this, delay);
@@ -70,7 +136,7 @@ public class PredictingActivity extends AppCompatActivity {
 
     }
 
-    private String matchCurrentSignal(int numberOfNeighbours) {
+    private ArrayList<String> matchCurrentSignal(int numberOfNeighbours) {
 
         final WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
@@ -123,24 +189,14 @@ public class PredictingActivity extends AppCompatActivity {
                 }
             }
 
-            if(mostFrequentLocations.size() > 0){
-
-                String joinedLocations = mostFrequentLocations.get(0);
-                mostFrequentLocations.remove(0);
-
-                for(String location : mostFrequentLocations){
-                    joinedLocations += ", " + location;
-                }
-
-                return joinedLocations;
-            }
+            return mostFrequentLocations;
 
         }
         else{
             Toast.makeText(getApplicationContext(), "Turn on WiFi", Toast.LENGTH_SHORT).show();
         }
 
-        return "Not defined";
+        return null;
     }
 
     private void createRefTable() {
