@@ -43,8 +43,8 @@ function [ X, y, var_codes ] = parse_data( dataset )
     end
     
     % the expected output is the last column
-    X = X(:, 1:end-1);
     y = X(:, end);
+    X = X(:, 1:end-1);
 
 end
 

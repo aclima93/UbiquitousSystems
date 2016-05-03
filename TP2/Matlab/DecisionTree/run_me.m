@@ -5,7 +5,7 @@ clc;
 % read data from file
 
 dataset = importdata('wifi_logs.txt');
-if length(dataset) > 0
+if ~isempty(dataset)
     
     % ---------------------------------------------------
     % parse the dataset from string to translatable codes
@@ -23,6 +23,8 @@ if length(dataset) > 0
     % -----------------------
     % train the decision tree
     
+    % get labels back for easier analysis
+    train_y = var_codes(train_y, end);
     tree = fitctree(train_X, train_y);
     view(tree,'Mode','Graph');
     
@@ -38,7 +40,7 @@ if length(dataset) > 0
     
 else
     
-    disp('File is empty');
+    disp('File has no gathered data.');
     
 end
 %EOF
