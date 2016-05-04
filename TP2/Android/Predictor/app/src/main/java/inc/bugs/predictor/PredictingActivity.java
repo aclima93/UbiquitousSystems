@@ -62,9 +62,9 @@ public class PredictingActivity extends AppCompatActivity {
                         if(predictedLocations != null && predictedLocations.size() > 0){
 
                             predictedLocation = predictedLocations.get(0);
-                            predictedLocations.remove(0);
 
-                            for(String location : predictedLocations){
+                            for(int i = 1; i<predictedLocations.size(); i++){
+                                String location = predictedLocations.get(i);
                                 predictedLocation += ", " + location;
                             }
                         }
