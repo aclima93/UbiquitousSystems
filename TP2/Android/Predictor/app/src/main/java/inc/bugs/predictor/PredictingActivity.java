@@ -72,17 +72,15 @@ public class PredictingActivity extends AppCompatActivity {
                         if (predictedLocation == null){
 
                             locationTextView.setText( "Unknown Location.");
-                            locationImageView.setImageResource(R.drawable._default);
+                            locationImageView.setImageDrawable(getResources().getDrawable(R.drawable._default));
 
                         }
 
                         else {
 
-                            Log.d("Entry", predictedLocation);
                             locationTextView.setText(predictedLocation);
 
-
-                            String predictedLocationImg;
+                            String predictedLocationImg = "";
                             /*
                              *  Check only the first two most frequent predicted locations
                              *  because we don't have generated images for all n-combinations.
@@ -92,40 +90,57 @@ public class PredictingActivity extends AppCompatActivity {
                                 String location2 = predictedLocations.get(1).split(" - ")[0];
 
                                 if (location1.compareTo(location2) < 0){
-                                    predictedLocationImg = location1 + "_" + location2;
+                                    predictedLocationImg = location1.charAt(0) + "_" + location2.charAt(0);
                                 }
                                 else {
-                                    predictedLocationImg = location2 + "_" + location1;
+                                    predictedLocationImg = location2.charAt(0) + "_" + location1.charAt(0);
                                 }
 
                             }
-                            else{
+                            else if(predictedLocations.size() == 1){
                                 predictedLocationImg = predictedLocations.get(0).split(" - ")[0];
                             }
+
+                            Log.d("pL", predictedLocation);
+                            Log.d("plImg", predictedLocationImg);
 
                             int imageId;
                             switch (predictedLocationImg){
 
+                                case "A" :imageId = R.drawable.a; break;
                                 case "A_B" :imageId = R.drawable.a_b; break;
                                 case "A_D" :imageId = R.drawable.a_d; break;
+
+                                case "B" :imageId = R.drawable.b; break;
                                 case "B_C" :imageId = R.drawable.b_c; break;
                                 case "B_D" :imageId = R.drawable.b_d; break;
+
+                                case "C" :imageId = R.drawable.c; break;
                                 case "C_D" :imageId = R.drawable.c_d; break;
                                 case "C_E" :imageId = R.drawable.c_e; break;
+
+                                case "D1" :imageId = R.drawable.d1; break;
+                                case "D2" :imageId = R.drawable.d2; break;
+                                case "D3" :imageId = R.drawable.d3; break;
                                 case "D_E" :imageId = R.drawable.d_e; break;
                                 case "D_G" :imageId = R.drawable.d_g; break;
+
+                                case "E" :imageId = R.drawable.e; break;
                                 case "E_G" :imageId = R.drawable.e_g; break;
 
+                                case "G" :imageId = R.drawable.g; break;
+
                                 default: imageId = R.drawable._default;
+
                             }
 
-                            locationImageView.setImageResource(imageId);
+                            locationImageView.setImageDrawable(getResources().getDrawable(imageId));
                         }
 
                     } catch (NumberFormatException e) {
 
                         locationTextView.setText("Invalid number of neighbours.");
-                        locationImageView.setImageResource(R.drawable._default);
+                        locationImageView.setImageDrawable(getResources().getDrawable(R.drawable._default));
                     }
 
                     h.postDelayed(this, delay);
@@ -205,11 +220,30 @@ public class PredictingActivity extends AppCompatActivity {
 
         File wifiLogsFile = getStorageFile();
         ArrayList<String> lines = new ArrayList<>();
-        try {
-            lines = getStringFromFile(wifiLogsFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "IO Failure", Toast.LENGTH_SHORT).show();
+
+        if (wifiLogsFile == null){
+
+            InputStream inputStream;
+
+            try {
+                inputStream = getAssets().open("wifi_logs.txt");
+                lines = convertStreamToString( inputStream );
+                inputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "IO Failure", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+        else {
+
+
+            try {
+                lines = getStringFromFile(wifiLogsFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "IO Failure", Toast.LENGTH_SHORT).show();
+            }
         }
 
         for(String line : lines) {
@@ -239,10 +273,12 @@ public class PredictingActivity extends AppCompatActivity {
                 try {
                     if (!file.createNewFile()) {
                         Log.e("Oops!", "File not created.");
+                        return null;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "IO Failure", Toast.LENGTH_SHORT).show();
+                    return null;
                 }
             }
 
