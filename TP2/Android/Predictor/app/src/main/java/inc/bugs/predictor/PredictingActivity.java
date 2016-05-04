@@ -265,7 +265,7 @@ public class PredictingActivity extends AppCompatActivity {
 
         if( isExternalStorageReadable() ) {
 
-            File sdCard = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+            File sdCard = new File(Environment.getExternalStorageDirectory() + "/Documents");
             File dir = new File (sdCard.getAbsolutePath() + "/wifi_logs");
             file = new File(dir, "wifi_logs.txt");
 
