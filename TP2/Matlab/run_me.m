@@ -17,24 +17,11 @@ if ~isempty(dataset)
     
     [ train_X, test_X, train_y, test_y ] = split_data( X', y', 0.70 );
     
-    % -----------------------
-    % train the neural network
+    run('neural_network');
     
-    hidden_layers = ceil(log(length(unique(train_y))));
-    net = feedforwardnet( hidden_layers, 'trainlm' );
-    net = train(net, train_X, train_y);
+    run('decision_tree');
     
-    % ----------------------
-    % test the neural network
-    
-    predicted_y = net(test_X);
-    %round to nearest class
-    predicted_y = round(predicted_y);
-    
-    % ----------------
-    % confusion matrix
-    
-    C = confusionmat(test_y, predicted_y);
+    run('android');
     
 else
     
