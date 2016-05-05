@@ -13,6 +13,13 @@ accuracy = zeros(1, length(population));
 
 confusion_matrix = confusionmat(expected_y, predicted_y);
 
+figure;
+imagesc(confusion_matrix);
+colorbar
+title('Confusion Matrix')
+xlabel('Predicted Class')
+ylabel('Expected Class')
+
 for idx = 1:length(confusion_matrix)
     
     true_positives = confusion_matrix(idx,idx);

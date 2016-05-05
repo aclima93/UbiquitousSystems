@@ -23,8 +23,9 @@ decision_tree_accuracy = classification_performance(test_y', predicted_y);
 
 figure;
 plot(decision_tree_accuracy);
-title('Decision Tree Accuracy')
+title('Decision Tree Classification Accuracy')
 xlabel('Class')
+ylabel('Accuracy')
 
 
 %EOF

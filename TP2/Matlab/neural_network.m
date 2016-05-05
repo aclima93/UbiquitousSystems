@@ -19,7 +19,8 @@ neural_network_accuracy = classification_performance(test_y, predicted_y);
 
 figure;
 plot(neural_network_accuracy);
-title('Neural Network Accuracy')
+title('Neural Network Classification Accuracy')
 xlabel('Class')
+ylabel('Accuracy')
 
 %EOF
