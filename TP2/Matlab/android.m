@@ -11,7 +11,7 @@ if ~isempty(dataset)
     
     for num = 1:length(unique(num_neighbours))
         
-        idx = num_neighbours(num_neighbours == num);
+        idx = find(num_neighbours == num);
         expected_y_num_neighbours = expected_y(idx);
         predicted_y_num_neighbours = predicted_y(idx);
         
