@@ -9,7 +9,6 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -33,7 +32,9 @@ public class LoggingActivity extends AppCompatActivity implements SensorEventLis
 
     TextView orientationTextView;
 
-    FloatingActionButton fab;
+    Button addButton;
+    Button resetButton;
+    Spinner curLocationSpinner;
 
     SensorManager sensorManager;
     Sensor accelerometerSensor;
@@ -62,22 +63,36 @@ public class LoggingActivity extends AppCompatActivity implements SensorEventLis
 
         wifiLogsFile = getStorageFile();
 
-        Button resetButton = (Button) findViewById(R.id.reset_btn);
+        resetButton = (Button) findViewById(R.id.reset_btn);
         assert resetButton != null;
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // hide
+                addButton.setVisibility(View.INVISIBLE);
+                curLocationSpinner.setVisibility(View.INVISIBLE);
+                resetButton.setVisibility(View.INVISIBLE);
+
                 while( wifiLogsFile.exists() ){
                     if(wifiLogsFile.delete()) {
                         break;
                     }
                 }
                 wifiLogsFile = getStorageFile();
+
+                // unhide
+                addButton.setVisibility(View.VISIBLE);
+                curLocationSpinner.setVisibility(View.VISIBLE);
+                resetButton.setVisibility(View.VISIBLE);
+
+                Toast.makeText(getApplicationContext(), "File has been reset", Toast.LENGTH_SHORT).show();
             }
         });
 
         orientationTextView = (TextView) findViewById(R.id.cur_orientation_tv);
-        Spinner locationSpinner = (Spinner) findViewById(R.id.cur_location_spinner);
+        curLocationSpinner = (Spinner) findViewById(R.id.cur_location_spinner);
+
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<>();
@@ -97,24 +112,33 @@ public class LoggingActivity extends AppCompatActivity implements SensorEventLis
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner + click listener
-        if (locationSpinner != null) {
-            locationSpinner.setOnItemSelectedListener(this);
-            locationSpinner.setAdapter(dataAdapter);
-        }
+        assert curLocationSpinner != null;
+        curLocationSpinner.setOnItemSelectedListener(this);
+        curLocationSpinner.setAdapter(dataAdapter);
 
-        // floating action button
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
 
-                    fab.setVisibility(View.GONE);
-                    addSignals();
-                    fab.setVisibility(View.VISIBLE);
-                }
-            });
-        }
+        addButton = (Button) findViewById(R.id.add_btn);
+        assert addButton != null;
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // hide
+                addButton.setVisibility(View.INVISIBLE);
+                curLocationSpinner.setVisibility(View.INVISIBLE);
+                resetButton.setVisibility(View.INVISIBLE);
+
+                // perform measurements
+                addSignals();
+
+                // unhide
+                addButton.setVisibility(View.VISIBLE);
+                curLocationSpinner.setVisibility(View.VISIBLE);
+                resetButton.setVisibility(View.VISIBLE);
+
+            }
+        });
+
 
     }
 

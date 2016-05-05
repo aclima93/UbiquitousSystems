@@ -33,6 +33,46 @@
             android:gravity="center"
             android:text="3"/>
 
+
+        <Switch
+            android:id="@+id/log_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log Predictions"/>
+
+        <LinearLayout
+            android:id="@+id/log_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Current Expected Location:"
+                android:gravity="center"/>
+
+            <Spinner
+                android:id="@+id/cur_location_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Current Orientation:"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/cur_orientation_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"/>
+        </LinearLayout>
+
     </LinearLayout>
 
     <View
@@ -54,11 +94,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Location - Orientation:"
+            android:text="Predicted location and orientation:"
             android:gravity="center"/>
 
         <TextView
-            android:id="@+id/location_tv"
+            android:id="@+id/predicted_location_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"/>
@@ -70,7 +110,7 @@
             android:gravity="center"/>
 
         <ImageView
-            android:id="@+id/location_img"
+            android:id="@+id/predicted_location_iv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

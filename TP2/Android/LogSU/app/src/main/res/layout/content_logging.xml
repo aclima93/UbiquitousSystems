@@ -10,10 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="inc.bugs.logger.LoggingActivity"
-    tools:showIn="@layout/activity_logging">
-
-
+    tools:context="inc.bugs.logger.LoggingActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,12 +54,33 @@
         android:layout_marginBottom="25dp"
         android:layout_below="@id/cur_orientation_ll"/>
 
-    <Button
-        android:id="@+id/reset_btn"
-        android:layout_below="@id/separator"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Reset Logs"/>
+        android:orientation="horizontal"
+        android:layout_below="@id/separator"
+        android:gravity="center"
+        android:weightSum="1">
+
+        <Button
+            android:layout_weight="0.5"
+            android:id="@+id/reset_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Reset Logs"
+            android:textColor="#ff0000"/>
+
+        <Button
+            android:layout_weight="0.5"
+            android:id="@+id/add_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Add to Logs"
+            android:textColor="#0000ff"/>
+
+    </LinearLayout>
+
 
 </RelativeLayout>
