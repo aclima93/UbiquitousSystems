@@ -65,6 +65,10 @@ public class PredictingActivity extends AppCompatActivity implements SensorEvent
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_predicting);
 
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
         createRefTable();
 
         predictedLocationsFile = getPredictionsFile();
@@ -133,6 +137,19 @@ public class PredictingActivity extends AppCompatActivity implements SensorEvent
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(this, magnetometerSensor, SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
     private void predictLocation() {
 
         try {
@@ -169,7 +186,7 @@ public class PredictingActivity extends AppCompatActivity implements SensorEvent
                 if( logSwitch.isChecked() ) {
 
                     String expectedLocation = curLocation + " - " + curOrientation;
-                    String predictionLogEntry = expectedLocation + "," + numberOfNeighbours + "," + predictedLocation;
+                    String predictionLogEntry = expectedLocation + "," + numberOfNeighbours + "," + predictedLocation + "\n";
 
                     Log.d("pL", predictedLocation);
                     Log.d("eL", expectedLocation);
