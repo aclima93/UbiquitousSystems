@@ -23,7 +23,11 @@ if ~isempty(dataset)
     
     run('neural_network');
     
+    pause;
+    
     run('decision_tree');
+    
+    pause;
     
 else
     
@@ -48,6 +52,8 @@ if ~isempty(dataset)
     [ train_X, test_X, train_y, test_y ] = split_data( X', y', 0.70 );
     
     run('neural_network');
+    
+    pause;
     
     run('decision_tree');
   

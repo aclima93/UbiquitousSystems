@@ -35,12 +35,13 @@ if ~isempty(dataset)
         
     end
     
+    pause;
+    
 else
     
     disp('wifi_predictions.txt has no gathered data.');
     
 end
-
 
 % -------------------
 % read data from file
@@ -79,9 +80,13 @@ if ~isempty(dataset)
         
     end
     
+    pause;
+    
 else
     
     disp('wifi_predictions_no_orientation.txt has no gathered data.');
     
 end
+
+
 %EOF
