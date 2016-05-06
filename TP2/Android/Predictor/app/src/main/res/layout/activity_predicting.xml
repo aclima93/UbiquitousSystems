@@ -33,6 +33,17 @@
             android:gravity="center"
             android:text="3"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Current Expected Location:"
+            android:gravity="center"/>
+
+        <Spinner
+            android:id="@+id/cur_location_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"/>
 
         <Switch
             android:id="@+id/log_switch"
@@ -47,18 +58,6 @@
             android:orientation="vertical"
             android:visibility="invisible"
             android:gravity="center">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Current Expected Location:"
-                android:gravity="center"/>
-
-            <Spinner
-                android:id="@+id/cur_location_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"/>
 
             <TextView
                 android:layout_width="match_parent"

@@ -15,10 +15,15 @@ predicted_y = round(predicted_y);
 % ---------------------------------
 % analise performance of classifier
 
-neural_network_accuracy = classification_performance(test_y, predicted_y);
+neural_network_accuracy = classification_performance(test_y, predicted_y, 'Neural Network', var_codes(:, 3));
 
 figure;
 plot(neural_network_accuracy);
+
+ax = gca;        
+ax.XTickLabel = var_codes(:, 3);
+ax.XTickLabelRotation = 90;
+ax.XTick = 1:length(ax.XTickLabel);
 title('Neural Network Classification Accuracy')
 xlabel('Class')
 ylabel('Accuracy')

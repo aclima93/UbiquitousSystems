@@ -25,7 +25,7 @@ if ~isempty(dataset)
     
 else
     
-    disp('File has no gathered data.');
+    disp('wifi_logs.txt has no gathered data.');
     
 end
 %EOF
