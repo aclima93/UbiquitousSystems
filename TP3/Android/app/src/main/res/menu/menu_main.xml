@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="pt.uc.su.predictor.MainActivity">
+    <item
+        android:id="@+id/update_location"
+        android:orderInCategory="100"
+        android:title="Update location"
+        app:showAsAction="always" />
+</menu>
