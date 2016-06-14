@@ -60,6 +60,8 @@ public class Entry {
             this.startMinute = calendar.get(Calendar.MINUTE);
             this.startSecond = calendar.get(Calendar.SECOND);
 
+            System.out.println("Starting at " + startHour + " h " + startMinute + " m " + startSecond);
+
             calendar.setTime(this.end);
 
             this.endHour = calendar.get(Calendar.HOUR_OF_DAY);

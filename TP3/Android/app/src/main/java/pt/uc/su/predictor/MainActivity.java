@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         double closestLat = 0.0;
         double closestLon = 0.0;
+        long closestId = 0;
 
         double guessLat = 0.0;
         double guessLon = 0.0;
@@ -162,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     minDistance = distance;
                     closestLat = entry.getLatitude();
                     closestLon = entry.getLongitude();
+                    closestId = entry.getId();
                 }
             }
         }
@@ -176,24 +178,44 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         ArrayList<Long> background = new ArrayList<>();
         ArrayList<Long> follow_ups = new ArrayList<>();
+        ArrayList<Double> lats = new ArrayList<>();
+        ArrayList<Double> lons = new ArrayList<>();
+        ArrayList<Long> durations = new ArrayList<>();
+        ArrayList<Integer> startHours = new ArrayList<>();
+        ArrayList<Integer> startMinutes = new ArrayList<>();
+        ArrayList<Integer> startSeconds = new ArrayList<>();
+
+
 
         for(int i = 0; i<this.entries.size(); i++) {
             for (int j = 0; j<this.entries.get(i).size(); j++) {
-                if(between(nowHour, nowMinute, nowSecond, this.entries.get(i).get(j))) {
+                if(this.entries.get(i).get(j).getId()==closestId && between(nowHour, nowMinute, nowSecond, this.entries.get(i).get(j))) {
                     if(j < this.entries.get(i).size()-1) {
                         background.add(this.entries.get(i).get(j).getId());
                         follow_ups.add(this.entries.get(i).get(j+1).getId());
+                        durations.add(this.entries.get(i).get(j+1).getDuration());
+                        startHours.add(this.entries.get(i).get(j+1).getStartHour());
+                        startMinutes.add(this.entries.get(i).get(j+1).getStartMinute());
+                        startSeconds.add(this.entries.get(i).get(j+1).getStartSecond());
+                        lats.add(this.entries.get(i).get(j+1).getLatitude());
+                        lons.add(this.entries.get(i).get(j+1).getLongitude());
                     }
                     else if(i < this.entries.size()-1) {
                         background.add(this.entries.get(i).get(j).getId());
                         follow_ups.add(this.entries.get(i+1).get(0).getId());
+                        durations.add(this.entries.get(i+1).get(0).getDuration());
+                        startHours.add(this.entries.get(i+1).get(0).getStartHour());
+                        startMinutes.add(this.entries.get(i+1).get(0).getStartMinute());
+                        startSeconds.add(this.entries.get(i+1).get(0).getStartSecond());
+                        lats.add(this.entries.get(i+1).get(0).getLatitude());
+                        lons.add(this.entries.get(i+1).get(0).getLongitude());
                     }
                 }
             }
         }
 
         HashMap<Long,Integer> options = new HashMap<>();
-        for(Long current : background) {
+        for(Long current : follow_ups) {
             if(!options.containsKey(current)) {
                 options.put(current,1);
             } else {
@@ -205,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         long bestId = 0;
 
         long bestDuration = 0;
-        int bestStartTime = 0;
+        long bestStartTime = 0;
 
         for(Long current : options.keySet()) {
             if(options.get(current) > bestCount) {
@@ -214,19 +236,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
 
-        for(ArrayList<Entry> day : this.entries) {
-            for(Entry current : day) {
-                if(current.getId() == bestId) {
-                    bestDuration += current.getDuration();
-                    bestStartTime += (3600*current.getStartHour() + 60*current.getStartMinute() + current.getStartSecond());
-                    guessLat = current.getLatitude();
-                    guessLon = current.getLongitude();
-                }
+        for(int i=0; i<follow_ups.size(); i++) {
+            if(follow_ups.get(i) == bestId) {
+                bestDuration += durations.get(i);
+                bestStartTime += ((3600*startHours.get(i)) + (60*startMinutes.get(i)) + (startSeconds.get(i)));
+                guessLat = lats.get(i);
+                guessLon = lons.get(i);
             }
         }
 
-        bestDuration/=bestCount;
-        bestStartTime/=bestCount;
+        if(bestCount!=0) {
+            bestDuration /= bestCount;
+            bestStartTime /= bestCount;
+        }
 
         TextView t1 = (TextView) findViewById(R.id.currentLocation);
         t1.setText("Your current location is in blue.");
@@ -295,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if(seconds == 0) {
                     return minutes + " minute" + (seconds>1?"s.":".");
                 } else {
-                    return minutes + " minute" + (seconds>1?"s e ":" e ") + seconds + " second" + (seconds>1?"s.":".");
+                    return minutes + " minute" + (seconds>1?"s and ":" and ") + seconds + " second" + (seconds>1?"s.":".");
                 }
             }
         } else {
@@ -303,13 +325,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if(seconds == 0) {
                     return hours + " hour" + (seconds>1?"s.":".");
                 } else {
-                    return hours + " hour" + (seconds>1?"s e ":" e ") + seconds + " second" + (seconds>1?"s.":".");
+                    return hours + " hour" + (seconds>1?"s and ":" and ") + seconds + " second" + (seconds>1?"s.":".");
                 }
             } else {
                 if(seconds == 0) {
-                    return hours + " hour" + (seconds>1?"s e ":" e ") + minutes + " minute" + (minutes>1?"s.":".");
+                    return hours + " hour" + (seconds>1?"s and ":" and ") + minutes + " minute" + (minutes>1?"s.":".");
                 } else {
-                    return hours + " hour" + (seconds>1?"s, ":", ") + minutes + " minute" + (minutes>1?"s e ":" e ") + seconds + " second" + (seconds>1?"s.":".");
+                    return hours + " hour" + (seconds>1?"s, ":", ") + minutes + " minute" + (minutes>1?"s and ":" and ") + seconds + " second" + (seconds>1?"s.":".");
                 }
             }
         }
