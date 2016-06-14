@@ -3,52 +3,48 @@ package pt.uc.su.predictor;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.util.Pair;
-import android.view.View;
+import android.text.format.Time;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
 
 import android.os.Handler;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private Location currentLocation;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private ArrayList<Place> places;
+    private ArrayList<ArrayList<Entry>> entries;
     private GoogleMap mMap;
 
     @Override
@@ -60,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        this.places = loadDataFromAssets();
+        this.entries = loadDataFromAssets();
 
         final Handler handler = new Handler();
         final int delay = 1000;
@@ -110,10 +106,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    public ArrayList<Place> loadDataFromAssets() {
+    public ArrayList<ArrayList<Entry>> loadDataFromAssets() {
         String json = null;
-        ArrayList<Place> result = new ArrayList<>();
-        Place cur, prev;
+        ArrayList<ArrayList<Entry>> result = new ArrayList<>();
         try {
             InputStream is = getAssets().open("places.json");
             int size = is.available();
@@ -125,42 +120,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             ioe.printStackTrace();
             return null;
         }
+
         try {
-            JSONArray array = new JSONArray(json);
-            for (int i = 0; i < array.length(); i++) {
-                JSONArray array1 = array.getJSONObject(i).getJSONArray("segments");
-                prev = new Place(array1.getJSONObject(0));
-                boolean found = false;
-                for (Place temp : result) {
-                    if (temp.getId() == prev.getId()) {
-                        prev = temp;
-                        found = true;
-                        break;
-                    }
-                }
+            JSONArray days = new JSONArray(json);
+            for (int i = 0; i < days.length(); i++) {
+                ArrayList<Entry> today = new ArrayList<>();
+                JSONArray places = days.getJSONObject(i).getJSONArray("segments");
 
-                if (!found) {
-                    result.add(prev);
+                for (int j = 0; j < places.length(); j++) {
+                    today.add(new Entry(places.getJSONObject(j)));
                 }
-                cur = prev;
-                for (int j = 1; j < array1.length(); j++) {
-                    prev = cur;
-                    cur = new Place(array1.getJSONObject(j));
-                    found = false;
-                    for (Place temp : result) {
-                        if (temp.getId() == cur.getId()) {
-                            cur = temp;
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        result.add(cur);
-                    }
-                    prev.addDestination(cur);
-                    cur.addPredecessor(prev);
-
-                }
+                result.add(today);
             }
         } catch (JSONException je) {
             je.printStackTrace();
@@ -170,53 +140,186 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return result;
     }
 
-    public Place makePrediction() {
+    public void makePrediction() {
         if (this.currentLocation == null) {
-            return null;
+            return;
         }
         double latitude = this.currentLocation.getLatitude();
         double longitude = this.currentLocation.getLongitude();
 
-        Place current = null;
-
         double closestLat = 0.0;
         double closestLon = 0.0;
+
         double guessLat = 0.0;
         double guessLon = 0.0;
 
         double minDistance = Double.MAX_VALUE;
 
-        for (Place aux : this.places) {
-            double distance = Math.sqrt((Math.pow((aux.getLatitude() - latitude), 2)) + (Math.pow((aux.getLongitude() - longitude), 2)));
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestLat = aux.getLatitude();
-                closestLon = aux.getLongitude();
-                current = aux;
+        for(ArrayList<Entry> day : this.entries) {
+            for(Entry entry : day) {
+                double distance = Math.sqrt((Math.pow((entry.getLatitude() - latitude), 2)) + (Math.pow((entry.getLongitude() - longitude), 2)));
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestLat = entry.getLatitude();
+                    closestLon = entry.getLongitude();
+                }
             }
         }
 
-        Place guess = current.getDestination();
-        guessLat = guess.getLatitude();
-        guessLon = guess.getLongitude();
+        Date now = new Date();
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(now);
+
+        int nowHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int nowMinute = calendar.get(Calendar.MINUTE);
+        int nowSecond = calendar.get(Calendar.SECOND);
+
+        ArrayList<Long> background = new ArrayList<>();
+        ArrayList<Long> follow_ups = new ArrayList<>();
+
+        for(int i = 0; i<this.entries.size(); i++) {
+            for (int j = 0; j<this.entries.get(i).size(); j++) {
+                if(between(nowHour, nowMinute, nowSecond, this.entries.get(i).get(j))) {
+                    if(j < this.entries.get(i).size()-1) {
+                        background.add(this.entries.get(i).get(j).getId());
+                        follow_ups.add(this.entries.get(i).get(j+1).getId());
+                    }
+                    else if(i < this.entries.size()-1) {
+                        background.add(this.entries.get(i).get(j).getId());
+                        follow_ups.add(this.entries.get(i+1).get(0).getId());
+                    }
+                }
+            }
+        }
+
+        HashMap<Long,Integer> options = new HashMap<>();
+        for(Long current : background) {
+            if(!options.containsKey(current)) {
+                options.put(current,1);
+            } else {
+                options.put(current, options.get(current)+1);
+            }
+        }
+
+        int bestCount = 0;
+        long bestId = 0;
+
+        long bestDuration = 0;
+        int bestStartTime = 0;
+
+        for(Long current : options.keySet()) {
+            if(options.get(current) > bestCount) {
+                bestCount = options.get(current);
+                bestId = current;
+            }
+        }
+
+        for(ArrayList<Entry> day : this.entries) {
+            for(Entry current : day) {
+                if(current.getId() == bestId) {
+                    bestDuration += current.getDuration();
+                    bestStartTime += (3600*current.getStartHour() + 60*current.getStartMinute() + current.getStartSecond());
+                    guessLat = current.getLatitude();
+                    guessLon = current.getLongitude();
+                }
+            }
+        }
+
+        bestDuration/=bestCount;
+        bestStartTime/=bestCount;
 
         TextView t1 = (TextView) findViewById(R.id.currentLocation);
-        t1.setText("Your current location (blue) is: " + latitude + " : " + longitude);
+        t1.setText("Your current location is in blue.");
         TextView t2 = (TextView) findViewById(R.id.closestLocation);
-        t2.setText("The closest stored location (pink) is: " + closestLat + " : " + closestLon);
-        TextView t3 = (TextView) findViewById(R.id.nextLocation);
-        t3.setText("Your next location (yellow) will probably be: " + guessLat + " : " + guessLon);
+        t2.setText("The closest stored location is in pink.");
+        if(bestCount != 0) {
+            TextView t3 = (TextView) findViewById(R.id.nextLocation);
+            t3.setText("Our guessed location is in yellow. This is based in " + bestCount + " previous read" + (bestCount>1?"s.":".") + "You'll be there for " + this.getDurationString(bestDuration) + "You'll arrive there at around " + this.getStartString(bestStartTime));
+        } else {
+            TextView t3 = (TextView) findViewById(R.id.nextLocation);
+            t3.setText("We were unable to guess your next location. Try moving more often!");
+        }
 
         mMap.clear();
         LatLng currentLatLng = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(currentLatLng).title("Atual").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        mMap.addMarker(new MarkerOptions().position(currentLatLng).title("Current").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         LatLng closestLatLng = new LatLng(closestLat, closestLon);
-        mMap.addMarker(new MarkerOptions().position(closestLatLng).title("Vizinho").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        mMap.addMarker(new MarkerOptions().position(closestLatLng).title("Closest").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
         LatLng guessLatLng = new LatLng(guessLat, guessLon);
-        mMap.addMarker(new MarkerOptions().position(guessLatLng).title("Próximo").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(closestLatLng));
+        if(bestCount != 0) {
+            mMap.addMarker(new MarkerOptions().position(guessLatLng).title("Guess").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+        }
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(currentLatLng);
+        builder.include(closestLatLng);
+        if(bestCount!=0) {
+            builder.include(guessLatLng);
+        }
+        LatLngBounds bounds = builder.build();
 
-        return guess;
+        int padding = 75;
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds,padding);
+
+        mMap.animateCamera(cameraUpdate);
+    }
+
+    public boolean between(int hour, int minute, int second, Entry test) {
+        boolean afterStart = false;
+        boolean beforeEnd = false;
+
+        if( (hour > test.getStartHour()) || (hour==test.getStartHour() && minute > test.getStartMinute()) || (hour==test.getStartHour() && minute==test.getStartMinute() && second > test.getStartSecond()) ) {
+            afterStart = true;
+        }
+        if( (hour < test.getEndHour()) || (hour==test.getEndHour() && minute < test.getEndMinute()) || (hour==test.getEndHour() && minute==test.getEndMinute() && second < test.getEndSecond()) ) {
+            beforeEnd = true;
+        }
+
+        if(afterStart && beforeEnd) {
+            return true;
+        }
+        return false;
+    }
+
+    public String getDurationString(long duration) {
+        long hours = duration / 3600;
+        long minutes = (duration - hours*3600)/ 60;
+        long seconds = duration - hours*3600 - minutes*60;
+        if(hours == 0) {
+            if(minutes == 0) {
+                if(seconds == 0) {
+                    return "no time at all.";
+                } else {
+                    return seconds + " second" + (seconds>1?"s.":".");
+                }
+            } else {
+                if(seconds == 0) {
+                    return minutes + " minute" + (seconds>1?"s.":".");
+                } else {
+                    return minutes + " minute" + (seconds>1?"s e ":" e ") + seconds + " second" + (seconds>1?"s.":".");
+                }
+            }
+        } else {
+            if(minutes == 0) {
+                if(seconds == 0) {
+                    return hours + " hour" + (seconds>1?"s.":".");
+                } else {
+                    return hours + " hour" + (seconds>1?"s e ":" e ") + seconds + " second" + (seconds>1?"s.":".");
+                }
+            } else {
+                if(seconds == 0) {
+                    return hours + " hour" + (seconds>1?"s e ":" e ") + minutes + " minute" + (minutes>1?"s.":".");
+                } else {
+                    return hours + " hour" + (seconds>1?"s, ":", ") + minutes + " minute" + (minutes>1?"s e ":" e ") + seconds + " second" + (seconds>1?"s.":".");
+                }
+            }
+        }
+    }
+
+    public String getStartString(long start) {
+        long hours = start / 3600;
+        long minutes = (start - hours*3600)/ 60;
+        long seconds = start - hours*3600 - minutes*60;
+        return hours + "h" + minutes + "m" + seconds + ".";
     }
 
     @Override
@@ -260,6 +363,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Add a marker in Sydney and move the camera
         LatLng base = new LatLng(40.1867241, -8.4157713);
         mMap.addMarker(new MarkerOptions().position(base).title("Base marker"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(base, 10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(base, 15));
     }
 }
